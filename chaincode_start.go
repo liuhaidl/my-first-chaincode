@@ -48,12 +48,17 @@ func main() {
 
 // Init resets all the things
 func (t *SimpleChaincode) Init(stub *shim.ChaincodeStub, function string, args []string) ([]byte, error) {
+    var err error
 	if len(args) != 1 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 1")
 	}
 
+	po := &PurchOrder { "12345","1986","100","6094","07/04/2016" }
 
-    err := stub.PutState("hello_world", []byte(args[0]))
+	value, _ := json.Marshal(po)
+
+    err = stub.PutState(po.PONum, []byte(value))  //write the variable into the chaincode state
+
     if err != nil {
         return nil, err
     }
